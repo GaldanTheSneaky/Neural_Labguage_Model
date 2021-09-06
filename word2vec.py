@@ -121,12 +121,12 @@ def train_model(x_train, y_train, vocabulary_size):
 
     model.add(Dense(vocabulary_size + 1, activation='softmax'))
 
-    opt = Adam(learning_rate=0.001, decay=1e-6)
+    opt = Adam(learning_rate=0.1, decay=1e-6)
     model.compile(loss='sparse_categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
     print(model.summary())
     model = model.fit(x_train, y_train,
-                      batch_size=1000,
-                      epochs=20,
+                      batch_size=500,
+                      epochs=200,
                       validation_data=(x_validation, y_validation),
                       verbose=1)
 
