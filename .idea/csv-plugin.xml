@@ -10,7 +10,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\dataset.csv">
+        <entry key="\small_training_data.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

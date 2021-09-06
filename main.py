@@ -11,7 +11,7 @@ def main():
         reader = csv.reader(file)
         data = list(reader)[0]
 
-    x_train, y_train, vocabulary_size = word2vec.prepare_training_data(data, 5)
+    x_train, y_train, vocabulary_size = word2vec.prepare_training_data(data, 2)
     word2vec.train_model(x_train, y_train, vocabulary_size)
 
 

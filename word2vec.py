@@ -1,5 +1,6 @@
 import nltk
 import io
+import os
 import csv
 import string
 
@@ -16,6 +17,7 @@ import itertools
 import tqdm
 import random
 import numpy as np
+from scipy.spatial import distance
 
 import tensorflow as tf
 from tensorflow import keras
@@ -72,7 +74,7 @@ def prepare_training_data(data, window_size, save=False):
     for i in range(window_size * 2):
         window.append(data[i])
 
-    for i in range(len(data[window_size * 2 + 1:])):
+    for i in range(window_size * 2, len(data[window_size * 2 + 1:])):
         window.append(data[i])
         x_train = list(window[:window_size])
         x_train.extend(list(window[window_size + 1:]))
@@ -94,7 +96,7 @@ def prepare_training_data(data, window_size, save=False):
 
 
 def train_model(x_train, y_train, vocabulary_size):
-    x_train = [[word/vocabulary_size for word in sequence] for sequence in x_train]
+    x_train = [[word / vocabulary_size for word in sequence] for sequence in x_train]
     x_validation = x_train[int(len(x_train) * 0.8):]
     x_train = x_train[:int(len(x_train) * 0.8)]
     y_validation = y_train[int(len(y_train) * 0.8):]
@@ -104,7 +106,7 @@ def train_model(x_train, y_train, vocabulary_size):
     print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
 
     model = Sequential()
-    model.add(Embedding(vocabulary_size + 1, 200, input_length=len(x_train[0])))
+    model.add(Embedding(vocabulary_size, 20, input_length=len(x_train[0])))
     model.add(Flatten())
 
     model.add(Dense(256, activation='relu'))
@@ -119,17 +121,16 @@ def train_model(x_train, y_train, vocabulary_size):
     model.add(Dropout(0.2))
     model.add(BatchNormalization())
 
-    model.add(Dense(vocabulary_size + 1, activation='softmax'))
+    model.add(Dense(vocabulary_size, activation='softmax'))
 
-    opt = Adam(learning_rate=0.1, decay=1e-6)
+    opt = Adam(learning_rate=0.001, decay=1e-6)
     model.compile(loss='sparse_categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
     print(model.summary())
-    model = model.fit(x_train, y_train,
-                      batch_size=500,
-                      epochs=200,
-                      validation_data=(x_validation, y_validation),
-                      verbose=1)
+    model.fit(x_train, y_train,
+              batch_size=300,
+              epochs=20,
+              validation_data=(x_validation, y_validation),
+              verbose=1)
 
-    model.save()
+    model.save('model')
     print("Finish")
-
