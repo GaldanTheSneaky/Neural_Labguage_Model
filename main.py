@@ -1,5 +1,6 @@
 import word2vec
 import csv
+from collections import defaultdict
 from nltk.corpus import gutenberg
 import nltk
 
