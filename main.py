@@ -1,4 +1,4 @@
-import word2vec
+import language_model
 import csv
 from tensorflow import keras
 from collections import defaultdict
@@ -38,7 +38,7 @@ def main():
     for book_name in books_names:
         books[book_name] = gutenberg.words(book_name)
 
-    model = word2vec.LanguageModel()
+    model = language_model.LanguageModel()
     #model.read_dataset(books)
     #model.preprocess_dataset(save=True)
     model.load_preprocessed_data()
