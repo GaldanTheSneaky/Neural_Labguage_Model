@@ -42,11 +42,16 @@ def main():
     #model.read_dataset(books)
     #model.preprocess_dataset(save=True)
     model.load_preprocessed_data()
+    model.prepare_language_model_training_data(30)
 
-    model.prepare_cbow_training_data(5)
+    #model.set_default_language_model()
+    #model.train_model()
+    rnn = keras.models.load_model("model")
+    model.set_model(rnn)
 
-    model.set_default_cbow_model()
-    model.train_model()
+    first_words = "Now , when I say that I am in the habit of going to sea whenever I begin to grow hazy about the eyes"
+    first_words = first_words.split()
+    model.generate_text(first_words, 100)
 
 
 if __name__ == "__main__":
